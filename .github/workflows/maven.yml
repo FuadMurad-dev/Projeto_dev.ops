@@ -40,7 +40,7 @@ jobs:
         path: Projeto/target/*.jar
 
   test: 
-    
+
     runs-on: ubuntu-latest
 
     steps:
@@ -67,10 +67,13 @@ jobs:
     needs: test
 
     runs-on: ubuntu-latest
+    environment: Send email
 
     steps:
     - uses: actions/checkout@v4
     - name: notification
       run: sh scripts/sendemail.sh
+      env:
+        EMAIL_DESTINY: ${{secrets.EMAIL_DESTINY}}
 
   
