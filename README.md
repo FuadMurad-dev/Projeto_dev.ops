@@ -1,61 +1,22 @@
 # Projeto_dev.ops
 
-## Description
+Projeto Java (Maven) com pipeline de CI no GitHub Actions: compila, executa os testes, gera o relatório e envia uma notificação por e-mail.
 
-This is a small Java project (Maven) that works with game data stored in `games.json` and provides a simple JSON service and a `Main` entry point. The project includes unit tests for several game classes.
+## O projeto
+Aplicação Java que trabalha com dados de jogos armazenados em `games.json`, com um serviço simples de leitura de JSON e a classe `Main` como ponto de entrada. O foco do trabalho é o pipeline de integração contínua.
 
-## Features
+## Pipeline de CI (GitHub Actions)
+Definido em `.github/workflows/maven.yml`. Dispara em push e pull request na branch `main` e também manualmente.
 
-- Reads and processes game information from `games.json`.
-- Provides JSON handling via `JsonService`.
-- Simple CLI entry in `org.example.Main`.
-- Unit tests for several game classes.
+1. **Build:** configura o JDK 22 (Temurin) com cache do Maven, executa `mvn clean install -DskipTests` e publica o artefato gerado.
+2. **Test:** executa `mvn clean test site` e publica o relatório de testes (`target/site`) como artefato.
+3. **Notification:** após os testes, roda `scripts/sendemail.sh` para enviar um e-mail de aviso. O destinatário vem de um secret do repositório (`EMAIL_DESTINY`), em um ambiente protegido (`Send email`).
 
-## Project Structure
-
-- `Projeto/` - main Java source and resources
-  - `src/main/java/information/Game.java` - game model
-  - `src/main/java/json/JsonService.java` - JSON handling utilities
-  - `src/main/java/org/example/Main.java` - application entry point
-  - `src/test/java/` - unit tests
-- `games.json` - sample data file used by the application
-
-## Requirements
-
-- Java 11+ (JDK)
-- Maven 3.6+
-
-## Build
-
-Build the project with Maven:
-
-```
-mvn clean package
+## Como rodar localmente
+```bash
+cd Projeto
+mvn clean test
 ```
 
-## Run
-
-If the project produces a runnable jar, run it with:
-
-```
-java -jar target/your-artifact.jar
-```
-
-Alternatively, run the `Main` class from your IDE or using the Maven exec plugin:
-
-```
-mvn exec:java -Dexec.mainClass="org.example.Main"
-```
-
-## Tests
-
-Run unit tests with:
-
-```
-mvn test
-```
-
-## Notes
-
-- Update `games.json` to change or extend test/sample data.
-- `JsonService` contains JSON parsing and serialization helpers used across the project.
+## Tecnologias
+Java 22, Maven, GitHub Actions, Bash.
